@@ -1,5 +1,5 @@
 main(params){
-return "hello"
+return "hello asd"
 }
 
 module.exports = main
