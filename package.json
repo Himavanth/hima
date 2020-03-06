@@ -1,6 +1,6 @@
 {
-  "name": "hima",
-  "version": "1.0.0",
+  "name": "hima-package-test",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
