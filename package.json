@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "prepack": "touch check.js && git add check.js"
+    "version": "touch check.js && git add check.js"
   },
   "repository": {
     "type": "git",
