@@ -1,17 +1,14 @@
 name: Daily - test install aio-cli
 
-on:
-  schedule:
-    # run daily at midnight
-    - cron: '0 0 * * *'
+on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node: [10, 12, 14]
-        os: [ubuntu-latest]
+        node: [14]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - name: npm
