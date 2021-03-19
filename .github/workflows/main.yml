@@ -1,0 +1,21 @@
+name: Daily - test install aio-cli
+
+on:
+  schedule:
+    # run daily at midnight
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [10, 12, 14]
+        os: [ubuntu-latest]
+
+    steps:
+    - name: npm
+      env:
+        NPM_CONFIG_PREFIX: "~/.npm-global"
+      run: |
+        npm i -g @adobe/aio-cli
