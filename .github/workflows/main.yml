@@ -11,9 +11,12 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
+    - name: Setup CLI
+      uses: adobe/aio-cli-setup-action@1.0.1
+      with:
+        os: ${{ matrix.os }}
     - name: npmaudit
       run: |
-        npm i -g @adobe/aio-cli
         mkdir testapp
         cd testapp
         aio app init -y
