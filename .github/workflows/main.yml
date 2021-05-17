@@ -8,11 +8,16 @@ jobs:
     strategy:
       matrix:
         node: [14]
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
 
     steps:
-    - name: npm
-      env:
-        NPM_CONFIG_PREFIX: "~/.npm-global"
+    - name: npmaudit
       run: |
         npm i -g @adobe/aio-cli
+        mkdir testapp
+        cd testapp
+        aio app init -y
+    - uses: oke-py/npm-audit-action@v1.7.2
+      with:
+        audit_level: high
+        github_token: ${{ secrets.ISSUE_TOKEN }}
