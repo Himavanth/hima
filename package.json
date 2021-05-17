@@ -18,7 +18,5 @@
     "url": "https://github.com/Himavanth/hima/issues"
   },
   "homepage": "https://github.com/Himavanth/hima#readme",
-  "dependencies": {
-    "cloudevents-sdk": "^1.0.0"
-  }
+  "dependencies": {}
 }
