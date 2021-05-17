@@ -22,5 +22,6 @@ jobs:
         aio app init -y
     - uses: oke-py/npm-audit-action@v1.7.2
       with:
+        working_directory: './testapp'
         audit_level: high
         github_token: ${{ secrets.ISSUE_TOKEN }}
