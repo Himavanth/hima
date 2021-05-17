@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: install dependencies
-        run: npm ci
+        run: npm i
       - uses: oke-py/npm-audit-action@v1.7.1
         with:
           audit_level: high
