@@ -26,6 +26,6 @@ jobs:
       with:
         issue_title: 'High and/or Critical vulnerability found in npm audit'
         working_directory: './testapp'
-        audit_level: critical
+        audit_level: high
         github_token: ${{ secrets.GITHUB_TOKEN }}
         dedupe_issues: true
