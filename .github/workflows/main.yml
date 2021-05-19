@@ -1,8 +1,8 @@
 name: Daily - test install aio-cli
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
+  push:
+    branches: [ master ]
 
 jobs:
   build:
@@ -25,5 +25,6 @@ jobs:
     - uses: oke-py/npm-audit-action@v1.7.2
       with:
         working_directory: './testapp'
-        audit_level: high
+        audit_level: critical
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        dedupe_issues: true
