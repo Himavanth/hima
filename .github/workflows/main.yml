@@ -24,6 +24,7 @@ jobs:
         aio app init -y
     - uses: oke-py/npm-audit-action@v1.7.2
       with:
+        issue_title: 'High and/or Critical vulnerability found in npm audit'
         working_directory: './testapp'
         audit_level: critical
         github_token: ${{ secrets.GITHUB_TOKEN }}
