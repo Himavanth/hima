@@ -24,4 +24,4 @@ jobs:
       with:
         working_directory: './testapp'
         audit_level: high
-        github_token: ${{ secrets.ISSUE_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
