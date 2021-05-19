@@ -1,8 +1,8 @@
 name: Daily - test install aio-cli
 
 on:
-  push:
-    branches: [ master ]
+  schedule:
+    - cron: '*/5 * * * *'
 
 jobs:
   build:
