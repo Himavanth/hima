@@ -21,7 +21,7 @@ jobs:
         run: |
           npm i
           npm i axios@0.21.0
-          npm audit --audit-level=high >> auditoutput.txt
+          npm audit >> auditoutput.txt
       - id: issuecheck
         name: check for existing github issue
         continue-on-error: true
