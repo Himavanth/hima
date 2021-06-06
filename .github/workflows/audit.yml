@@ -22,8 +22,8 @@ jobs:
           npm i
           npm i axios@0.21.0
           npm audit --audit-level=high --json >> auditoutput.txt
-      - id: issue
-        name: create github issue
+      - id: issuecheck
+        name: check for existing github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         if: steps.installandcheck.outcome != 'success'
@@ -33,15 +33,14 @@ jobs:
           echo "auditoutput=$(cat auditoutput.txt)"
           curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
           cat curloutput.txt
-          grep  -q "vulnerability" curloutput.txt
-          echo "shouldcreateissue=$(echo $?)" >> $GITHUB_ENV
-          echo "${{ env.shouldcreateissue }}"
-      - id: noissue
-        name: dont create github issue
+          grep -q "avulnerability" curloutput.txt
+      - id: issuecreate
+        name: create github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
-        if: steps.installandcheck.outcome == 'success'
+        if: steps.installandcheck.outcome != 'success' && steps.issuecheck.outcome != 'success'
         run: |
-          echo "all good"
+          echo "now create the issue"
+          cat auditoutput.txt
 
 
