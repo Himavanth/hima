@@ -24,6 +24,8 @@ jobs:
           npm audit --audit-level=high
       - id: issue
         name: create github issue
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
         run: |
           echo "$STEPS_CONTEXT"
 
