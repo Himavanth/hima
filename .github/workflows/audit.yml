@@ -16,6 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: install dependencies
+        id: installandcheck
+        continue-on-error: true
         run: |
           npm i
           npm i axios@0.21.0
