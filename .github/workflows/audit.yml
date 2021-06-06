@@ -33,6 +33,9 @@ jobs:
           echo "auditoutput=$(cat auditoutput.txt)"
           curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
           cat curloutput.txt
+          grep  -q "vulnerability" curloutput.txt
+          echo "shouldcreateissue=$(echo $?)" >> $GITHUB_ENV
+          echo "${{ env.shouldcreateissue }}"
       - id: noissue
         name: dont create github issue
         env:
