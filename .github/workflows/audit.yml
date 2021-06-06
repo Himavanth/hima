@@ -21,11 +21,20 @@ jobs:
         run: |
           npm i
           npm i axios@0.21.0
-          npm audit --audit-level=critical
+          npm audit --audit-level=high
       - id: issue
         name: create github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
+        if: steps.installandcheck.outcome != 'success'
         run: |
           echo "$STEPS_CONTEXT"
+      - id: noissue
+        name: dont create github issue
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        if: steps.installandcheck.outcome == 'success'
+        run: |
+          echo "all good"
+
 
