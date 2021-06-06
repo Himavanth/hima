@@ -24,6 +24,7 @@ jobs:
           npm audit --audit-level=high --json >> auditoutput.txt
       - id: issuecheck
         name: check for existing github issue
+        continue-on-error: true
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         if: steps.installandcheck.outcome != 'success'
