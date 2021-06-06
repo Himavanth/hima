@@ -16,8 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: install dependencies
-        run: npm i
-      - uses: oke-py/npm-audit-action@v1.7.2
-        with:
-          audit_level: high
-          github_token: ${{ secrets.ISSUE_TOKEN }}
+        run: |
+          npm i
+          npm i axios@0.21.0
+          npm audit
+
