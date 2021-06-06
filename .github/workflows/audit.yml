@@ -15,15 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: install dependencies
-        id: installandcheck
+      - id: installandcheck
+        name: install dependencies
         continue-on-error: true
         run: |
           npm i
           npm i axios@0.21.0
           npm audit --audit-level=high
-      - name: create github issue
-        id: issue
+      - id: issue
+        name: create github issue
         run: |
           echo "$STEPS_CONTEXT"
 
