@@ -21,7 +21,7 @@ jobs:
         run: |
           npm i
           npm i axios@0.21.0
-          npm audit >> auditoutput.txt
+          npm audit --audit-level=high >> auditoutput.txt
       - id: issuecheck
         name: check for existing github issue
         continue-on-error: true
@@ -29,12 +29,9 @@ jobs:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         if: steps.installandcheck.outcome != 'success'
         run: |
-          echo "$STEPS_CONTEXT"
-          cat auditoutput.txt
-          echo "auditoutput=$(cat auditoutput.txt)"
           curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
           cat curloutput.txt
-          grep -q "avulnerability" curloutput.txt
+          grep -q "High and/or Critical vulnerability found in npm audit" curloutput.txt
       - id: issuecreate
         name: create github issue
         env:
@@ -42,7 +39,7 @@ jobs:
         if: steps.installandcheck.outcome != 'success' && steps.issuecheck.outcome != 'success'
         uses: peter-evans/create-issue-from-file@v3
         with:
-          title: Vulnerability
+          title: High and/or Critical vulnerability found in npm audit
           content-filepath: ./auditoutput.txt
           labels: |
             audit
