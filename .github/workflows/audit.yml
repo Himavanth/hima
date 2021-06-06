@@ -22,5 +22,8 @@ jobs:
           npm i
           npm i axios@0.21.0
           npm audit --audit-level=high
+      - name: create github issue
+        id: issue
+        run: |
           echo "$STEPS_CONTEXT"
 
