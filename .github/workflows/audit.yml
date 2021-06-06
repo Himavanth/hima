@@ -31,8 +31,8 @@ jobs:
           echo "$STEPS_CONTEXT"
           cat auditoutput.txt
           echo "auditoutput=$(cat auditoutput.txt)"
-          echo "auditoutput=$(cat auditoutput.txt)" >> $GITHUB_ENV
-          echo "${{ env.auditoutput }}"
+          curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
+          cat curloutput.txt
       - id: noissue
         name: dont create github issue
         env:
