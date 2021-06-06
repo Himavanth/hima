@@ -40,8 +40,10 @@ jobs:
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         if: steps.installandcheck.outcome != 'success' && steps.issuecheck.outcome != 'success'
-        run: |
-          echo "now create the issue"
-          cat auditoutput.txt
-
-
+        uses: peter-evans/create-issue-from-file@v3
+        with:
+          title: Vulnerability
+          content-filepath: ./auditoutput.txt
+          labels: |
+            audit
+            bug
