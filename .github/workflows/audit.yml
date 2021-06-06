@@ -19,5 +19,6 @@ jobs:
         run: |
           npm i
           npm i axios@0.21.0
-          npm audit
+          npm audit --audit-level=high
+          echo "$STEPS_CONTEXT"
 
