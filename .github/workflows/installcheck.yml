@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         node: [14]
-        os: [windows-latest]
+        os: [windows-]
 
     steps:
     - name: Setup CLI
@@ -21,6 +21,7 @@ jobs:
       run: |
         mkdir testapp
         cd testapp
+        aio info
         aio app init -y
         aio app build
         dir dist/web-src-prod
