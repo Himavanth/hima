@@ -1,0 +1,25 @@
+name: Daily - test install aio-cli
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [12]
+        os: [windows-latest]
+
+    steps:
+    - name: Setup CLI
+      uses: adobe/aio-cli-setup-action@1.0.1
+      with:
+        os: ${{ matrix.os }}
+    - name: npmaudit
+      run: |
+        mkdir testapp
+        cd testapp
+        aio app init -y
+        aio app build
