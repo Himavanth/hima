@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         node: [14]
-        os: [windows-]
+        os: [windows-latest]
 
     steps:
     - name: Setup CLI
