@@ -8,6 +8,7 @@ on:
 # on:
 #   schedule:
 #     - cron: '0 10 * * *'
+# nice
 
 jobs:
   scan:
