@@ -19,6 +19,8 @@ jobs:
         name: install dependencies
         continue-on-error: true
         run: |
+          jq
+          awk
           npm i
           npm i axios@0.21.0
           npm audit --audit-level=high >> auditoutput.txt
