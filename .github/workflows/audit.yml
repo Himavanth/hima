@@ -39,11 +39,13 @@ jobs:
         # remove false below to enable this step
         if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
         run: |
-          cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
-          jq -n --rawfile input issuetext.txt '{"title": "audit report", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -d @- | jq .url > issuecreationoutput.txt
-          cat issuecreationoutput.txt
-          echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
+          cat auditoutput.txt
+          cat curloutput.txt
+        # cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
+        # jq -n --rawfile input issuetext.txt '{"title": "audit report", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        # -d @- | jq .url > issuecreationoutput.txt
+        # cat issuecreationoutput.txt
+        # echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
       - id: postslackmessage
         name: Slack Notification
         if: steps.createandaudit.outcome != 'success'
