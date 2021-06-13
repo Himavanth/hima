@@ -31,7 +31,7 @@ jobs:
         if: steps.createandaudit.outcome != 'success'
         run: |
           curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug,audit' > curloutput.txt
-          grep -q "High and/or Critical vulnerability found in npm audit" curloutput.txt
+          grep -q "High and/or Critical avulnerability found in npm audit" curloutput.txt
       - id: issuecreate
         name: create github issue
         env:
