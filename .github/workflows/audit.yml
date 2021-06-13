@@ -1,4 +1,4 @@
-name: npm audit
+name: npm audit of a FF App (aio app init -y)
 
 on:
   pull_request:
@@ -28,6 +28,7 @@ jobs:
         continue-on-error: true
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
+        # remove "false &&" below to enable this step
         if: steps.createandaudit.outcome != 'success'
         run: |
           curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
@@ -36,9 +37,23 @@ jobs:
         name: create github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
+        # remove false below to enable this step
         if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }}
-          curl "https://api.github.com/repos/himavanth/hima/issues" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{ "title": "from curl through github action", "labels": ["audit", "bug"], "body": "what\nhello<br>maybe"}' -v
+          cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
+          jq -n --rawfile input issuetext.txt '{"title": "audit report", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d @- | jq .url > issuecreationoutput.txt
+          cat issuecreationoutput.txt
+          echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
+      - id: postslackmessage
+      - name: Slack Notification
+        if: steps.createandaudit.outcome != 'success'
+        #uses: rtCamp/action-slack-notify@v2
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+          #SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_TITLE: 'npm audit'
+          SLACK_MESSAGE: ${{ env.issueurl }}
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
+        run: |
+          echo ${{ env.issueurl }}
