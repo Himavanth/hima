@@ -38,7 +38,7 @@ jobs:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
         run: |
-          echo $GITHUB_TOKEN
-          curl "https://api.github.com/repos/himavanth/hima/issues" -H "Authorization: token $GITHUB_TOKEN" \
+          echo ${{ secrets.GITHUB_TOKEN }}
+          curl "https://api.github.com/repos/himavanth/hima/issues" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Content-Type: application/json" \
           -d '{ "title": "from curl through github action", "labels": ["audit", "bug"], "body": "what\nhello<br>maybe"}' -v
