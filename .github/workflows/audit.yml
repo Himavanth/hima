@@ -16,34 +16,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - id: installandcheck
-        name: install dependencies
+      - id: createandaudit
+        name: create app and audit
         continue-on-error: true
         run: |
-          jq
-          awk
           npm i
           npm i axios@0.21.0
-          npm audit --audit-level=high >> auditoutput.txt
-      - id: issuecheck
+          npm audit --audit-level=high > auditoutput.txt
+      - id: getexistingissue
         name: check for existing github issue
         continue-on-error: true
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
-        if: steps.installandcheck.outcome != 'success'
+        if: steps.createandaudit.outcome != 'success'
         run: |
           curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
-          cat curloutput.txt
-          grep -q "High and/or Critical vulnerability found in npm audit" curloutput.txt
+          grep -q "High and/or Critical avulnerability found in npm audit" curloutput.txt
       - id: issuecreate
         name: create github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
-        if: steps.installandcheck.outcome != 'success' && steps.issuecheck.outcome != 'success'
-        uses: peter-evans/create-issue-from-file@v3
-        with:
-          title: High and/or Critical vulnerability found in npm audit
-          content-filepath: ./auditoutput.txt
-          labels: |
-            audit
-            bug
+        if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
+        run: |
+          echo $GITHUB_TOKEN
+          env
