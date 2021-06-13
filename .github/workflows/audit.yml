@@ -1,7 +1,6 @@
 name: npm audit of a FF App (aio app init -y)
 
 on:
-  pull_request:
   push:
     branches:
       - master
@@ -46,7 +45,7 @@ jobs:
           cat issuecreationoutput.txt
           echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
       - id: postslackmessage
-      - name: Slack Notification
+        name: Slack Notification
         if: steps.createandaudit.outcome != 'success'
         #uses: rtCamp/action-slack-notify@v2
         env:
