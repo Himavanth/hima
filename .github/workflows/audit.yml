@@ -30,23 +30,25 @@ jobs:
         # remove "false &&" below to enable this step
         if: steps.createandaudit.outcome != 'success'
         run: |
-          curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug' > curloutput.txt
-          grep -q "High and/or Critical avulnerability found in npm audit" curloutput.txt
+          curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug,audit' > curloutput.txt
+          grep -q "High and/or Critical vulnerability found in npm audit" curloutput.txt
       - id: issuecreate
         name: create github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
-        # remove false below to enable this step
+        # remove "false &&" below to enable this step
+        # this step formats auditoutput to send as body of github issue to be created,
+        # creates issue with that text, and stores the issue url in github env
         if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
         run: |
           cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
-          jq -n --rawfile input issuetext.txt '{"title": "audit report", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          jq -n --rawfile input issuetext.txt '{"title": "High and/or Critical vulnerability found in npm audit of FF App", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -d @- | jq .url > issuecreationoutput.txt
           cat issuecreationoutput.txt
           echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
       - id: postslackmessage
         name: Slack Notification
-        if: steps.createandaudit.outcome != 'success'
+        if: ${{ failure() }}
         #uses: rtCamp/action-slack-notify@v2
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
