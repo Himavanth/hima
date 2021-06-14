@@ -58,7 +58,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_TITLE: 'npm audit'
-          SLACK_MESSAGE: ${{ env.issueurl || 'Vulnerability(ies) found' }}
+          SLACK_MESSAGE: ${{ env.issueurl || 'Vulnerabilities found' }}
           SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
         run: | 
           echo "job failed"
