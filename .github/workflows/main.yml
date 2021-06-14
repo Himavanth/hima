@@ -1,8 +1,9 @@
 name: Daily - npm audit
 
 on:
-  push:
-    branches: [ master ]
+  schedule:
+    # run daily at midnight
+    - cron: '0 0 * * *'
 
 jobs:
   build:
