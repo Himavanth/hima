@@ -39,7 +39,7 @@ jobs:
         # this step formats auditoutput to send as body of github issue to be created,
         # creates issue with that text, and stores the issue url in github env
         # remove "false &&" below to enable this step
-        if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
+        if: false && steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
         run: |
           cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
           jq -n --rawfile input issuetext.txt '{"title": "High and/or Critical vulnerability found in npm audit of FF App", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -58,7 +58,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_TITLE: 'npm audit'
-          SLACK_MESSAGE: ${{ env.issueurl }}
+          SLACK_MESSAGE: ${{ env.issueurl || 'Vulnerability(ies) found' }}
           SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
         run: | 
           echo "job failed"
