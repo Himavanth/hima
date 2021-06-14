@@ -37,7 +37,7 @@ jobs:
     - id: issuecreate
       name: create github issue
       # remove "false &&" below to enable this step
-      if: false && steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
+      if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
       env:
         STEPS_CONTEXT: ${{ toJSON(steps) }}
       # this step formats auditoutput to send as body of github issue to be created,
@@ -52,19 +52,14 @@ jobs:
       name: if audit had failed, run npm audit without json flag so we can see what is failing
       if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
       run: |
-        ls
         cd testapp
         npm audit
     - id: postslackmessage
       name: Slack Notification
       if: ${{ failure() }}
-      #uses: rtCamp/action-slack-notify@v2
+      uses: rtCamp/action-slack-notify@v2
       env:
-        STEPS_CONTEXT: ${{ toJSON(steps) }}
-        #SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_TITLE: 'npm audit'
-        SLACK_MESSAGE: ${{ env.issueurl }}
+        SLACK_MESSAGE: ${{ env.issueurl || 'Vulnerabilities found' }}
         SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
-      run: |
-        echo "job failed"
-        echo ${{ env.issueurl }}
