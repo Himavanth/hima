@@ -36,11 +36,10 @@ jobs:
         name: create github issue
         env:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
-        # remove "false &&" below to enable this step
         # this step formats auditoutput to send as body of github issue to be created,
         # creates issue with that text, and stores the issue url in github env
         # remove "false &&" below to enable this step
-        if: false && steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
+        if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
         run: |
           cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
           jq -n --rawfile input issuetext.txt '{"title": "High and/or Critical vulnerability found in npm audit of FF App", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -55,9 +54,13 @@ jobs:
       - id: postslackmessage
         name: Slack Notification
         if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2
+        #uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_TITLE: 'npm audit'
           SLACK_MESSAGE: ${{ env.issueurl }}
           SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
+        run: | 
+          echo "job failed"
+          echo ${{ env.issueurl }}
+          echo ${{ env.SLACK_MESSAGE }}
