@@ -15,6 +15,8 @@ jobs:
     steps:
     - name: Setup CLI
       uses: adobe/aio-cli-setup-action@1.0.1
+      with:
+        os: ${{ matrix.os }}
     - id: createandaudit
       name: create app and audit
       run: |
