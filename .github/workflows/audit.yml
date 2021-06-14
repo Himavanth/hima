@@ -55,13 +55,9 @@ jobs:
       - id: postslackmessage
         name: Slack Notification
         if: ${{ failure() }}
-        #uses: rtCamp/action-slack-notify@v2
+        uses: rtCamp/action-slack-notify@v2
         env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-          #SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_TITLE: 'npm audit'
           SLACK_MESSAGE: ${{ env.issueurl }}
           SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
-        run: |
-          echo "job failed"
-          echo ${{ env.issueurl }}
