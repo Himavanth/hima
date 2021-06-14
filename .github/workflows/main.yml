@@ -1,9 +1,9 @@
 name: Daily - npm audit
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    # run daily at midnight
+    - cron: '0 0 * * *'
 
 jobs:
   build:
@@ -33,19 +33,19 @@ jobs:
       env:
         STEPS_CONTEXT: ${{ toJSON(steps) }}
       run: |
-        curl 'https://api.github.com/repos/adobe/aio-cli/issues?labels=bug,audit' > curloutput.txt
-        grep -q "High and/or Critical avulnerability found in npm audit" curloutput.txt
+        curl 'https://api.github.com/repos/Himavanth/hima/issues?labels=bug,audit' > curloutput.txt
+        grep -q "High and/or Critical vulnerability found in npm audit" curloutput.txt
     - id: issuecreate
       name: create github issue
       # remove "false &&" below to enable this step
-      if: false && steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
+      if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
       env:
         STEPS_CONTEXT: ${{ toJSON(steps) }}
       # this step formats auditoutput to send as body of github issue to be created,
       # creates issue with that text, and stores the issue url in github env
       run: |
         cat auditoutput.txt | jq -r '.advisories[] | "\n**`\(.title)`** in module **`\(.module_name)`**\n ```\n\(.overview)\n```"' > issuetext.txt
-        jq -n --rawfile input issuetext.txt '{"title": "High and/or Critical vulnerability found in npm audit of FF App", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/adobe/aio-cli/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        jq -n --rawfile input issuetext.txt '{"title": "High and/or Critical vulnerability found in npm audit of FF App", "labels": ["audit","bug"], "body" : $input}' | curl "https://api.github.com/repos/Himavanth/hima/issues" -H "Content-Type: application/json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d @- | jq .url > issuecreationoutput.txt
         cat issuecreationoutput.txt
         echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
@@ -55,12 +55,3 @@ jobs:
       run: |
         cd testapp
         npm audit
-    - id: postslackmessage
-      name: Slack Notification
-      if: ${{ failure() }}
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_TITLE: 'npm audit'
-        SLACK_MESSAGE: ${{ env.issueurl || 'Vulnerabilities found' }}
-        SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
