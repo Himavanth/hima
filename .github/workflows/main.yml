@@ -17,7 +17,8 @@ jobs:
       uses: adobe/aio-cli-setup-action@1.0.1
       with:
         os: ${{ matrix.os }}
-    - name: npmaudit
+    - id: createandaudit
+      name: create app and audit
       run: |
         mkdir testapp
         cd testapp
@@ -51,6 +52,8 @@ jobs:
       name: if audit had failed, run npm audit without json flag so we can see what is failing
       if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
       run: |
+        ls
+        cd testapp
         npm audit
     - id: postslackmessage
       name: Slack Notification
