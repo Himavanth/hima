@@ -1,9 +1,9 @@
 name: Daily - npm audit
 
 on:
-  schedule:
-    # run daily at midnight UTC
-    - cron: '0 0 * * *'
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
       name: check for existing github issue
       continue-on-error: true
       # remove "false &&" below to enable this step
-      if: false && steps.createandaudit.outcome != 'success'
+      if: steps.createandaudit.outcome != 'success'
       env:
         STEPS_CONTEXT: ${{ toJSON(steps) }}
       run: |
@@ -51,7 +51,7 @@ jobs:
         echo "issueurl=`cat issuecreationoutput.txt`" >> $GITHUB_ENV
     - id: runaudit
       name: if audit had failed, run npm audit without json flag so we can see what is failing
-      if: steps.createandaudit.outcome != 'success' && steps.getexistingissue.outcome != 'success'
+      if: steps.createandaudit.outcome != 'success'
       run: |
         cd testapp
         npm audit
