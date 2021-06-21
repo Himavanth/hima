@@ -1,4 +1,4 @@
-name: Check creating FF App
+name: Check aio-cli github action
 
 on:
   push:
