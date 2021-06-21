@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Setup CLI
-      uses: Himavanth/aio-cli-setup-action@ver
+      uses: adobe/aio-cli-setup-action@ver
       with:
         os: ${{ matrix.os }}
         version: 6.0.0
-    - name: npmaudit
+    - name: info
       run: |
         aio info
