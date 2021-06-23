@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Setup CLI
-      uses: adobe/aio-cli-setup-action@1.1.0
+      uses: adobe/aio-cli-setup-action@1.x.x
       with:
         os: ${{ matrix.os }}
-        version: 7.0.0
+        version: 7.x.x
     - name: info
       run: |
         aio info
