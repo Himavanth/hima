@@ -32,6 +32,6 @@ jobs:
           git push
       - uses: JS-DevTools/npm-publish@v1
         with:
-          token: 'whatever'
+          token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ github.event.inputs.tag }}
           access: 'public'
