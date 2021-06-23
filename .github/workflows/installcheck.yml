@@ -17,7 +17,7 @@ jobs:
       uses: adobe/aio-cli-setup-action@1.1.0
       with:
         os: ${{ matrix.os }}
-        version: 6.0.0
+        version: 7.0.0
     - name: info
       run: |
         aio info
