@@ -1,9 +1,8 @@
 name: Daily - npm audit
 
 on:
-  schedule:
-    # run daily at midnight
-    - cron: '0 0 * * *'
+  push:
+    branches: [ master ]
 
 jobs:
   build:
@@ -23,7 +22,7 @@ jobs:
       run: |
         mkdir testapp
         cd testapp
-        aio app init -y
+        aio app init -y --no-login --no-extensions
         npm audit --audit-level=high --json > auditoutput.txt
     - id: getexistingissue
       name: check for existing github issue
