@@ -26,5 +26,6 @@ jobs:
         # aio app init -y --no-login --no-extensions
         # aio app build
         echo AIO_RUNTIME_NAMESPACE=\${{secrets.RUNTIME_NAMESPACE}}\\nAIO_RUNTIME_AUTH=\${{secrets.RUNTIME_AUTH}} > .env
+        echo whatever >> .env
         cat .env
     #    aio app deploy
