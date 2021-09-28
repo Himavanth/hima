@@ -14,10 +14,10 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    #- name: Setup CLI
-    #  uses: adobe/aio-cli-setup-action@1.1.0
-    #  with:
-    #    os: ${{ matrix.os }}
+    # - name: Setup CLI
+      # uses: adobe/aio-cli-setup-action@1.1.0
+      # with:
+      #  os: ${{ matrix.os }}
     - id: create
       name: create app with no extensions
       run: |
@@ -25,8 +25,8 @@ jobs:
         cd noextapp
         # aio app init -y --no-login --no-extensions
         # aio app build
-        echo AIO_RUNTIME_NAMESPACE=\${{secrets.RUNTIME_NAMESPACE}} > .env
-        echo AIO_RUNTIME_AUTH=\${{secrets.RUNTIME_AUTH}} >> .env
+        echo AIO_RUNTIME_AUTH=${{secrets.RUNTIME_AUTH}} > .env
+        echo AIO_RUNTIME_NAMESPACE=${{secrets.RUNTIME_NAMESPACE}} >> .env
         echo whatever >> .env
         cat .env
-    #    aio app deploy
+        # aio app deploy
