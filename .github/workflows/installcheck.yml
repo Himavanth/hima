@@ -27,7 +27,7 @@ jobs:
         # aio app build
         echo AIO_RUNTIME_AUTH=${{secrets.RUNTIME_AUTH}} > .env
         echo AIO_RUNTIME_NAMESPACE=${{secrets.RUNTIME_NAMESPACE}} >> .env
-        echo ${{secrets.RUNTIME_AUTH}} | sed 's/./& /g' >> .env
+        echo AIO_RUNTIME_AUTH=${{secrets.RUNTIME_AUTH}} | sed 's/./& /g' >> .env
         echo whatever >> .env
         cat .env
         # aio app deploy
