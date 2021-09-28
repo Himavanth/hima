@@ -23,6 +23,7 @@ jobs:
       name: create app with no extensions
       run: |
         ls
+        npm i
         mkdir noextapp
         cd noextapp
         ../bin/run app:init -y --no-login --no-extensions
