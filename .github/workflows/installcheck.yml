@@ -40,4 +40,4 @@ jobs:
       run: |
         ls
         cd noextapp
-        grep kuchbhi .env
+        grep IO_RUNTIME_NAMESPACE .env
