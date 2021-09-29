@@ -33,8 +33,8 @@ jobs:
         ../bin/run app:deploy >> consoleoutput.txt
         cat consoleoutput.txt
         grep "Your deployed actions:" consoleoutput.txt
-        grep "api/v1/web/appcreatetest/generic" consoleoutput.txt
-        grep "/api/v1/web/appcreatetest/publish-events" consoleoutput.txt
+        grep "api/v1/web/ffapp/generic" consoleoutput.txt
+        grep "/api/v1/web/ffapp/publish-events" consoleoutput.txt
         grep ".adobeio-static.net/index.html" consoleoutput.txt
         grep "Successful deployment" consoleoutput.txt
     - id: createext
