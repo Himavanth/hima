@@ -23,8 +23,8 @@ jobs:
       name: create app with no extensions
       run: |
         npm i
-        mkdir noextapp
-        cd noextapp
+        mkdir ffapp
+        cd ffapp
         ../bin/run app:init -y --no-login --no-extensions > consoleoutput.txt
         cat consoleoutput.txt
         grep "App initialization finished" consoleoutput.txt
@@ -32,31 +32,31 @@ jobs:
         echo AIO_RUNTIME_NAMESPACE=${{secrets.RUNTIME_NAMESPACE}} >> .env
         ../bin/run app:deploy >> consoleoutput.txt
         cat consoleoutput.txt
-        grep "Deployed 4 action(s) for 'application'" consoleoutput.txt
+        grep "Your deployed actions:" consoleoutput.txt
+        grep "api/v1/web/appcreatetest/generic" consoleoutput.txt
+        grep "/api/v1/web/appcreatetest/publish-events" consoleoutput.txt
+        grep ".adobeio-static.net/index.html" consoleoutput.txt
         grep "Successful deployment" consoleoutput.txt
-    - id: checkoutput
-      name: check the deploy output
-      if: ${{ failure() }}
-      run: |
-        cd noextapp
-        cat consoleoutput.txt
     - id: createext
       name: create app with no extensions
       run: |
-        mkdir extapp
-        cd extapp
+        rm -rf ffapp
+        mkdir ffapp
+        cd ffapp
         ../bin/run app:init -y --no-login --extension dx/excshell/1 > consoleoutput.txt
         cat consoleoutput.txt
         grep "App initialization finished" consoleoutput.txt
         echo AIO_RUNTIME_AUTH=${{secrets.RUNTIME_AUTH}} > .env
         echo AIO_RUNTIME_NAMESPACE=${{secrets.RUNTIME_NAMESPACE}} >> .env
-        ../bin/run app:deploy >> consoleoutput.txt
+        ../bin/run app:deploy --no-publish >> consoleoutput.txt
         cat consoleoutput.txt
-        grep "Deployed 2 action(s) for 'dx/excshell/1'" consoleoutput.txt
+        grep "Your deployed actions:" consoleoutput.txt
+        grep "api/v1/web/dx-excshell-1/generic" consoleoutput.txt
+        grep ".adobeio-static.net/index.html" consoleoutput.txt
         grep "Successful deployment" consoleoutput.txt
     - id: checkoutputext
       name: check the deploy output
       if: ${{ failure() }}
       run: |
-        cd extapp
+        cd ffapp
         cat consoleoutput.txt
