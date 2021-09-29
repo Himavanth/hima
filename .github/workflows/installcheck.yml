@@ -39,4 +39,5 @@ jobs:
       #if: contains('${{ steps.create.outputs.* }}', 'kuchbhi')
       run: |
         ls
+        cd noextapp
         grep kuchbhi .env
