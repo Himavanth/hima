@@ -23,7 +23,7 @@ jobs:
     - id: create
       name: create app with no extensions
       run: |
-        ls
+        #ls
         #npm i
         mkdir noextapp
         cd noextapp
@@ -32,9 +32,11 @@ jobs:
         echo AIO_RUNTIME_AUTH=${{secrets.RUNTIME_AUTH}} > .env
         echo AIO_RUNTIME_NAMESPACE=${{secrets.RUNTIME_NAMESPACE}} >> .env
         cat .env
+        ls
         #../bin/run app:deploy
     - id: checkoutput
       name: check the deploy output
       #if: contains('${{ steps.create.outputs.* }}', 'kuchbhi')
       run: |
+        ls
         grep kuchbhi .env
