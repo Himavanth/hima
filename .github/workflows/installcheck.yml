@@ -15,11 +15,11 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - name: Setup CLI
-      uses: actions/checkout@master
-      with:
-          repository: adobe/aio-cli-plugin-app
-          os: ${{ matrix.os }}
+    #- name: Setup CLI
+      #uses: actions/checkout@master
+      #with:
+          #repository: adobe/aio-cli-plugin-app
+          #os: ${{ matrix.os }}
     - id: create
       name: create app with no extensions
       run: |
@@ -27,9 +27,14 @@ jobs:
         npm i
         mkdir noextapp
         cd noextapp
-        ../bin/run app:init -y --no-login --no-extensions
-        ../bin/run app:build
+        #../bin/run app:init -y --no-login --no-extensions
+        #../bin/run app:build
         echo AIO_RUNTIME_AUTH=${{secrets.RUNTIME_AUTH}} > .env
         echo AIO_RUNTIME_NAMESPACE=${{secrets.RUNTIME_NAMESPACE}} >> .env
         cat .env
-        ../bin/run app:deploy
+        #../bin/run app:deploy
+    - id: checkoutput
+      name: check the deploy output
+      #if: contains('${{ steps.create.outputs.* }}', 'kuchbhi')
+      run: |
+        echo ${{ steps.create.outputs.* }}
