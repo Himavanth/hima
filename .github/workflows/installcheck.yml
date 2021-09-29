@@ -24,7 +24,7 @@ jobs:
       name: create app with no extensions
       run: |
         ls
-        npm i
+        #npm i
         mkdir noextapp
         cd noextapp
         #../bin/run app:init -y --no-login --no-extensions
@@ -37,4 +37,4 @@ jobs:
       name: check the deploy output
       #if: contains('${{ steps.create.outputs.* }}', 'kuchbhi')
       run: |
-        echo ${{ steps.create.outputs.* }}
+        grep kuchbhi .enva
